@@ -25,16 +25,17 @@ jobs:
         with:
           node-version: 20
 
-      - name: Install dependencies
+      - name: Install root dependencies
         run: npm install --include=dev
+
+      - name: Install Capacitor packages
+        run: npm install @capacitor/cli@6.2.0 @capacitor/android@6.2.0
+        working-directory: client
 
       - name: Build web app
         run: npm run build -w client
         env:
           VITE_API_URL: https://nexus-server-ooto.onrender.com
-
-      - name: Install Capacitor Android
-        run: npm install @capacitor/android@6.2.0 -w client
 
       - name: Add Android platform
         run: npx cap add android
