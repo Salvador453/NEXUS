@@ -33,5 +33,25 @@ export default function App(){
  <section className="bottom-tools"><button className="text-btn" onClick={backup}><Download size={15}/> Резервна копія JSON</button><span>Ваші дані ізольовані в межах акаунта</span></section>
  </main>{modal&&<div className="modal-backdrop" onClick={()=>setModal("")}><form className="modal" onSubmit={modal==="transaction"?saveTx:modal==="shift"?saveShift:modal==="goal"?saveGoal:saveReminder} onClick={e=>e.stopPropagation()}><div className="panel-head"><h3>{modal==="transaction"?"Нова операція":modal==="shift"?"Відмітка зміни":modal==="goal"?"Фінансова ціль":"Нагадування"}</h3><button type="button" className="icon-btn" onClick={()=>setModal("")}><X/></button></div>{modal==="transaction"&&<><select value={tx.type} onChange={e=>setTx({...tx,type:e.target.value})}><option value="expense">Витрата</option><option value="income">Дохід</option></select><input type="number" min="0.01" step="0.01" placeholder="Сума, ₴" value={tx.amount} onChange={e=>setTx({...tx,amount:e.target.value})} required/><input placeholder="Категорія" value={tx.category} onChange={e=>setTx({...tx,category:e.target.value})} required/><input placeholder="Примітка" value={tx.note} onChange={e=>setTx({...tx,note:e.target.value})}/><input type="date" value={tx.occurred_on} onChange={e=>setTx({...tx,occurred_on:e.target.value})}/></>}{modal==="shift"&&<><input type="date" value={shift.shift_date} onChange={e=>setShift({...shift,shift_date:e.target.value})}/><select value={shift.status} onChange={e=>setShift({...shift,status:e.target.value})}><option value="worked">Відпрацьовано</option><option value="day_off">Вихідний</option><option value="planned">Заплановано</option></select><input type="number" min="0" max="24" step=".5" placeholder="Години" value={shift.hours} onChange={e=>setShift({...shift,hours:e.target.value})}/><select value={shift.pay_type} onChange={e=>setShift({...shift,pay_type:e.target.value})}><option value="per_shift">Оплата за зміну</option><option value="hourly">Погодинна</option><option value="monthly">Місячна</option><option value="custom">Інша</option></select><input type="number" min="0" step=".01" placeholder="Заробіток за цей день, ₴" value={shift.amount} onChange={e=>setShift({...shift,amount:e.target.value})}/><input placeholder="Примітка" value={shift.note} onChange={e=>setShift({...shift,note:e.target.value})}/></>}{modal==="goal"&&<><input placeholder="Назва цілі" value={goal.title} onChange={e=>setGoal({...goal,title:e.target.value})} required/><input type="number" min="1" placeholder="Потрібна сума, ₴" value={goal.target} onChange={e=>setGoal({...goal,target:e.target.value})} required/><input type="number" min="0" placeholder="Вже накопичено, ₴" value={goal.current} onChange={e=>setGoal({...goal,current:e.target.value})}/></>}{modal==="reminder"&&<><input placeholder="Про що нагадати?" value={rem.title} onChange={e=>setRem({...rem,title:e.target.value})} required/><input type="datetime-local" value={rem.remind_at} onChange={e=>setRem({...rem,remind_at:e.target.value})}/></>}<button className="primary full">Зберегти</button></form></div>}</div>
 }
-function Stat({label,value,suffix,icon}:any){return <div className="stat-card"><div className="stat-top"><span>{label}</span><i>{icon}</i></div><b>{value}</b>{suffix&&<small>{suffix}</small>}</div>}
-function Empty({text}:any){return <div className="empty"><Sparkles size={22}/><p>{text}</p></div>}
+function Stat({label,value,suffix,icon}:any){
+ const Icon = icon;
+ return (
+  <div className="stat-card">
+   <div className="stat-top">
+    <span>{label}</span>
+    <i>{typeof Icon === "string" ? Icon : Icon ? <Icon size={20}/> : null}</i>
+   </div>
+   <b>{value}</b>
+   {suffix && <small>{suffix}</small>}
+  </div>
+ );
+}
+
+function Empty({text}:any){
+ return (
+  <div className="empty">
+   <Sparkles size={22}/>
+   <p>{text}</p>
+  </div>
+ );
+}
