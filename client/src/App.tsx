@@ -1,4 +1,5 @@
 import {useEffect,useState} from "react";
+import type {LucideIcon} from "lucide-react";
 import {Wallet,CalendarDays,ChartNoAxesCombined,Sparkles,Target,Bell,Plus,ArrowDownLeft,ArrowUpRight,LogOut,Trash2,Download,Send,Menu, X, Clock3} from "lucide-react";
 const API=(import.meta as any).env.VITE_API_URL||"";
 type User={id:number,email:string,display_name:string};
