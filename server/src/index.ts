@@ -15,7 +15,11 @@ app.use(cors());
 app.use(express.json({ limit: "1mb" }));
 const port = Number(process.env.PORT || 4000);
 const tokenFor = (userId: number) => jwt.sign({ userId }, process.env.JWT_SECRET!, { expiresIn: "30d" });
-const asyncRoute = (fn: any) => (req: any, res: any, next: any) => Promise.resolve(fn(req,res,next)).catch(next);
+type AsyncHandler = (req: any, res: Response, next: NextFunction) => Promise<unknown> | unknown;
+
+const asyncRoute = (fn: AsyncHandler) =>
+  (req: Request, res: Response, next: NextFunction) =>
+    Promise.resolve(fn(req, res, next)).catch(next);
 
 app.get("/api/health", (_req,res) => res.json({ ok:true, app:"NEXUS" }));
 
